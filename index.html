@@ -1,0 +1,42 @@
+<html>
+<head>
+</head>
+<body>
+    Hello,
+    
+    <button
+        onclick="App.handleSet()"
+    >Set</button>
+    
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.2/socket.io.js"
+    ></script>
+    <script src="config.js"></script>
+    <script>
+        var App = {
+            container: [],
+            
+            init: function() {
+                this.socket = io(config.uri);
+                
+                this.socket.on('connect', () => {
+                    this.socket.emit('init');
+
+                    this.socket.on('initSuccess', response => {
+                        this.container.push(response);
+                    });
+                });
+            },
+            
+            handleSet: function() {
+                this.socket.emit('set', {
+                    id: this.container[0].id,
+                    color: '#ff0000'
+                });
+            }
+        }
+        
+        App.init();
+    </script>
+</body>
+</html>
