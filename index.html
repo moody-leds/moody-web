@@ -1,42 +1,73 @@
 <html>
 <head>
+    <link href="https://fonts.googleapis.com/css?family=Baloo+Bhaijaan" rel="stylesheet">
+    <style>
+        .image-preview {
+            max-width: 600px;
+            opacity:0;
+            visibility: hidden;
+        }
+        
+        .image {
+            display: block;
+            margin: 3rem auto;
+        }
+        
+        html, body {
+            padding: 2rem;
+            text-align: center;
+            margin: 0;
+            background-color: #222;
+            color: #fff;
+            font-family: 'Baloo Bhaijaan', cursive;
+        }
+        
+        .inputfile {
+        	opacity: 0;
+        	overflow: hidden;
+        	position: absolute;
+        	z-index: -1;
+        }
+        
+        .inputfile + label {
+            font-size: 1.25em;
+            font-weight: 700;
+            color: white;
+            background-color: #7200ff;
+            padding: 1rem;
+            border-radius: .2rem;
+            display: inline-block;
+            transition: all .3s;
+        }
+
+        .inputfile:focus + label,
+        .inputfile + label:hover {
+            background-color: #4c00ab;
+        }
+        
+        .inputfile + label {
+        	cursor: pointer; /* "hand" cursor */
+        }
+    </style>
 </head>
 <body>
-    Hello,
-    
+    <!-- <input type="color" class="js-color"> -->
+    <!-- 
     <button
         onclick="App.handleSet()"
-    >Set</button>
+    >Set</button> -->
+    
+    <input type="file" class="js-input inputfile" id="file" />
+    <label for="file">Choose a picture</label>
+    
+    <canvas class="image js-image"></canvas>
+    <img class="js-image-preview image-preview">
+    
     
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.2/socket.io.js"
     ></script>
     <script src="config.js"></script>
-    <script>
-        var App = {
-            container: [],
-            
-            init: function() {
-                this.socket = io(config.uri);
-                
-                this.socket.on('connect', () => {
-                    this.socket.emit('init');
-
-                    this.socket.on('initSuccess', response => {
-                        this.container.push(response);
-                    });
-                });
-            },
-            
-            handleSet: function() {
-                this.socket.emit('set', {
-                    id: this.container[0].id,
-                    color: '#ff0000'
-                });
-            }
-        }
-        
-        App.init();
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
