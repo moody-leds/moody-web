@@ -2,6 +2,12 @@ var App = {
     container: [],
     canvas: null,
     file: null,
+    colorPage: document.getElementsByClassName('js-page-color')[0],
+    imagePage: document.getElementsByClassName('js-page-image')[0],
+    inputH: document.getElementsByClassName('js-color-h')[0],
+    inputS: document.getElementsByClassName('js-color-s')[0],
+    inputL: document.getElementsByClassName('js-color-l')[0],
+    colorPreview: document.getElementsByClassName('js-color-example')[0],
     
     init: function() {
         this.initSocket();
@@ -11,6 +17,36 @@ var App = {
         
         this.canvas = document.getElementsByClassName('js-image')[0];
         this.canvas.addEventListener('click', this.handleLineSelect.bind(this));
+        
+        this.colorPage.style.display = 'block';
+        this.imagePage.style.display = 'none';
+        
+        this.handleColorChange();
+    },
+    
+    getColor: function() {
+        const h = this.inputH.value;
+        const s = this.inputS.value;
+        const l = this.inputL.value;
+        
+        return "hsl(" + h + ", " + s + "%, " + l + "%)";
+    },
+    
+    handleColorChange: function(e) {
+        this.colorPreview.style.backgroundColor = this.getColor();
+    },
+    
+    handleChangePage: function(page) {
+        switch(page){
+            case 'color':
+                this.colorPage.style.display = 'block';
+                this.imagePage.style.display = 'none';
+                break;
+            case 'image':
+                this.colorPage.style.display = 'none';
+                this.imagePage.style.display = 'block';
+                break;
+        }
     },
     
     handleLineSelect: function (e) {
@@ -30,24 +66,28 @@ var App = {
     },
     
     countAvg: function(ctx, line) {
-        var map = [];
-        var y = line ? line : 20;
-        for(var j = 0; j < 30; j++){
-            const offset = ctx.canvas.width / 30;
-            const dist = j * offset;
-            var avg = [0,0,0];
-            for(var i = dist; i < dist + offset; i++){
-                avg[0] += ctx.getImageData(i, y, 1, 1).data[0];
-                avg[1] += ctx.getImageData(i, y, 1, 1).data[1];
-                avg[2] += ctx.getImageData(i, y, 1, 1).data[2];
+        // var x = 0;
+        // setInterval(() => {
+            var map = [];
+            var y = line ? line : 20;
+            for(var j = 0; j < 30; j++){
+                const offset = ctx.canvas.width / 30;
+                const dist = j * offset;
+                var avg = [0,0,0];
+                for(var i = dist; i < dist + offset; i++){
+                    avg[0] += ctx.getImageData(i, y, 1, 1).data[0];
+                    avg[1] += ctx.getImageData(i, y, 1, 1).data[1];
+                    avg[2] += ctx.getImageData(i, y, 1, 1).data[2];
+                }
+                avg[0] /= offset;
+                avg[1] /= offset;
+                avg[2] /= offset;
+                map.push('#' + this.rgbToHex(parseInt(avg[0]), parseInt(avg[1]), parseInt(avg[2])));
             }
-            avg[0] /= offset;
-            avg[1] /= offset;
-            avg[2] /= offset;
-            map.push('#' + this.rgbToHex(parseInt(avg[0]), parseInt(avg[1]), parseInt(avg[2])));
-        }
-        
-        this.handleSet(map);
+            
+            this.handleSet(map);
+            // x++;
+        // }, 1);
     },
     
     handleImageChange: function(e) {
@@ -91,6 +131,13 @@ var App = {
         this.socket.emit('set', {
             id: 0,
             color: map
+        });
+    },
+    
+    handleSetColor: function() {
+        this.socket.emit('set', {
+            id: 0,
+            color: [this.getColor()]
         });
     }
 }
