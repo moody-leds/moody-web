@@ -1,0 +1,21 @@
+
+.nav {
+    background-color: rgba(0,0,0, .1);
+    margin-bottom: 1rem;
+}
+
+.nav__item {
+    padding: 1.5rem 2rem;
+    display: inline-block;
+    /*border-left: 1px solid #fff;*/
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.nav__item:hover {
+    background-color: #222;
+}
+
+.nav__item:last-child {
+    /*border-right: 1px solid #fff;*/
+}

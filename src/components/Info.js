@@ -7,8 +7,9 @@ class Info extends Component {
     render() {
         const {container} = this.props;
         return <div>
-            {container.map(item => {
-                return <div>{item.id} {item.title}</div>
+            <p><u>Available units</u></p>
+            {container.map((item, index) => {
+                return <div key={index}>{index + 1}. {item.name}</div>
             })}
         </div>
     }

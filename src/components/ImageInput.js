@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Utils from '../classes/Utils';
 
 class ImageInput extends Component {
     constructor(props){
