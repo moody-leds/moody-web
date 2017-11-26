@@ -17,7 +17,8 @@ class App extends Component {
         this.state = {
             page: 'color',
             container: [],
-            connected: false
+            connected: false,
+            units: []
         }
     }
     
@@ -43,17 +44,29 @@ class App extends Component {
         });
     }
     
-    handleSet = (units, color) => {
+    handleSet = (type, value) => {
+        const {units} = this.state;
         units.map(unit => {
             this.socket.emit('set', {
                 id: unit,
-                color
+                type,
+                value
             });
         });
     }
     
+    handleUnitToggle = (id) => {
+        const {units} = this.state;
+        const index = units.indexOf(id);
+        this.setState({
+            units: index > -1 ?
+                units.slice(0, index).concat(units.slice(index + 1)) :
+                [].concat(units, [id])
+        });
+    }
+    
     render() {
-        const {page, container, connected} = this.state;
+        const {page, container, connected, units} = this.state;
         
         if(!connected){
             return <div className="connection-error">
@@ -64,6 +77,18 @@ class App extends Component {
         
         return <div>
             <Nav changePage={this.changePage} />
+            {container.map((item, index) => 
+                <div
+                    key={index}
+                    className={
+                        'input btn unit ' +
+                        (units.indexOf(item.id) > -1 ? 'unit--selected ' : '')
+                    }
+                    onClick={() => this.handleUnitToggle(item.id)}
+                >
+                    {item.id}
+                </div>
+            )}
             <Content setColor={this.handleSet} page={page} container={container} />
         </div>;
     }
