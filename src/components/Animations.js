@@ -6,7 +6,7 @@ class Animations extends Component {
     }
     
     handleAnimationSet = (name) => {
-        this.props.setColor();
+        this.props.setColor('animation', name);
     }
     
     render() {
