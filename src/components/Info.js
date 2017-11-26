@@ -9,7 +9,7 @@ class Info extends Component {
         return <div>
             <p><u>Available units</u></p>
             {container.map((item, index) => {
-                return <div key={index}>{index + 1}. {item.name}</div>
+                return <div key={index}>{index + 1}. {item.id}</div>
             })}
         </div>
     }

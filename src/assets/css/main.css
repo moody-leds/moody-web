@@ -30,3 +30,17 @@ html, body {
     justify-content: center;
     align-items: center;
 }
+
+.unit {
+    font-size: 1.2rem;
+    height: 50px;
+    line-height: 50px;
+    background-color: rgba(0,0,0,.5);
+    margin: 1rem auto;
+    user-select: none;
+    display: block;
+}
+
+.unit--selected {
+    color: #fff;
+}

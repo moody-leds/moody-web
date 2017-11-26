@@ -43,10 +43,12 @@ class App extends Component {
         });
     }
     
-    handleSet = (color) => {
-        this.socket.emit('set', {
-            id: 0,
-            color
+    handleSet = (units, color) => {
+        units.map(unit => {
+            this.socket.emit('set', {
+                id: unit,
+                color
+            });
         });
     }
     

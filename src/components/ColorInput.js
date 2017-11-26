@@ -6,7 +6,8 @@ class ColorInput extends Component {
         super(props);
         
         this.state = {
-            color: {h: 0, s: 50, l: 50}
+            color: {h: 0, s: 50, l: 50},
+            units: []
         }
     }
     handleColorChange = (e, item) => {
@@ -16,10 +17,31 @@ class ColorInput extends Component {
             })
         })
     }
+    handleUnitToggle = (id) => {
+        const {units} = this.state;
+        const index = units.indexOf(id);
+        this.setState({
+            units: index > -1 ?
+                units.slice(0, index).concat(units.slice(index + 1)) :
+                [].concat(units, [id])
+        });
+    }
     render() {
-        const {color} = this.state;
-        const {setColor} = this.props;
+        const {color, units} = this.state;
+        const {setColor, container} = this.props;
         return <div>
+            {container.map((item, index) => 
+                <div
+                    key={index}
+                    className={
+                        'input btn unit ' +
+                        (units.indexOf(item.id) > -1 ? 'unit--selected ' : '')
+                    }
+                    onClick={() => this.handleUnitToggle(item.id)}
+                >
+                    {item.id}
+                </div>
+            )}
             <div style={{backgroundColor: Utils.getColor(color)}} className="color-example js-color-example input"></div>
             <div className="input--slider">
                 <input
@@ -46,7 +68,7 @@ class ColorInput extends Component {
                     className="input js-color-l" 
                     type="range" min="0" max="100" step="1" />
             </div>
-            <button className="input btn" onClick={() => setColor([Utils.getColor(color)])}>Set</button>
+            <button className="input btn" onClick={() => setColor(units, [Utils.getColor(color)])}>Set</button>
         </div>
     }
 }

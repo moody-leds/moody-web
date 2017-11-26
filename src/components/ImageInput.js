@@ -47,7 +47,7 @@ class ImageInput extends Component {
                 map.push('#' + Utils.rgbToHex(parseInt(avg[0]), parseInt(avg[1]), parseInt(avg[2])));
             }
             
-            setColor(map);
+            setColor(0, map);
             // x++;
         // }, 1);
     }

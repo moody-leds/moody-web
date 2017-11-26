@@ -12,7 +12,7 @@ class Content extends Component {
         
         switch(this.props.page){
             case 'color':
-                return <ColorInput setColor={setColor}/>;
+                return <ColorInput setColor={setColor} container={container}/>;
             case 'image':
                 return <ImageInput setColor={setColor} />;
             case 'info':
